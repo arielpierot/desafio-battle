@@ -21,6 +21,7 @@ export class Warrior extends Character {
 
   constructor(name: string) {
     super(name);
-    super.type = Warrior.name;
+    this.setLife(this.status.life);
+    this.setType(Warrior.name);
   }
 }

@@ -1,15 +1,15 @@
 import {
     iBattleModifiers,
-    iProfession,
     iStatus,
 } from '../interfaces/interfaces';
 
-export abstract class Character implements iProfession {
+export abstract class Character {
     private name: string;
     private dead: boolean;
-    type: string;
-    status: iStatus;
-    battleModifiers: iBattleModifiers;
+    private life: number;
+    private type: string;
+    readonly status: iStatus;
+    readonly battleModifiers: iBattleModifiers;
 
     constructor(name: string) {
         this.name = name;
@@ -59,10 +59,18 @@ export abstract class Character implements iProfession {
     }
 
     public getLife(): number {
-        return this.status.life;
+        return this.life;
     }
 
     public setLife(life: number) {
-        this.status.life = life;
+        this.life = life;
+    }
+
+    public getType() {
+        return this.type;
+    }
+
+    public setType(type: string) {
+        this.type = type;
     }
 }

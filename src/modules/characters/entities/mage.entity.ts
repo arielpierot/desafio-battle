@@ -22,6 +22,7 @@ export class Mage extends Character {
 
   constructor(name: string) {
     super(name);
-    super.type = Mage.name;
+    this.setLife(this.status.life);
+    this.setType(Mage.name);
   }
 }

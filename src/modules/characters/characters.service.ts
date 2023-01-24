@@ -4,6 +4,7 @@ import { Character } from './entities/character.entity';
 import { Mage } from './entities/mage.entity';
 import { Thief } from './entities/thief.entity';
 import { Warrior } from './entities/warrior.entity';
+import { iResponseFirstAttacker } from './interfaces/interfaces';
 
 const characters = new Map<string, Character>();
 
@@ -55,25 +56,20 @@ export class CharacterService implements OnApplicationBootstrap {
     }
 
     battle(battleCharactersDto: BattleCharactersDto): Array<string> {
-        let firstCharacter = characters.get(
+        let battleResponse = new Array<string>();
+        const firstCharacter = characters.get(
             battleCharactersDto.character_name_first,
         );
-        let secondCharacter = characters.get(
+        const secondCharacter = characters.get(
             battleCharactersDto.character_name_second,
         );
-        let battleResponse = new Array<string>();
-
-        let firstAttacker = this.firstCharacterToAttack(
+        const responseCompareVelocity = this.compareCharacterVelocity(
             firstCharacter,
-            secondCharacter,
-            battleResponse,
+            secondCharacter
         );
 
-        if (firstAttacker.getName() == firstCharacter.getName()) {
-            this.challenge(firstCharacter, secondCharacter, battleResponse)
-            return battleResponse;
-        }
-        this.challenge(secondCharacter, firstCharacter, battleResponse)
+        battleResponse = battleResponse.concat(responseCompareVelocity.response);
+        this.challenge(responseCompareVelocity.firstAttacker, responseCompareVelocity.firstDefenser, battleResponse);
         return battleResponse;
     }
 
@@ -81,11 +77,13 @@ export class CharacterService implements OnApplicationBootstrap {
         if (firstCharacter.getDead() || secondCharacter.getDead()) {
             return;
         }
-        this.attack(firstCharacter, secondCharacter, battleResponse);
+        this.attack(firstCharacter, secondCharacter)
+            .forEach(value => battleResponse.push(value));
         this.challenge(secondCharacter, firstCharacter, battleResponse)
     }
 
-    attack(attacker: Character, defenser: Character, battleResponse: Array<string>) {
+    attack(attacker: Character, defenser: Character): Array<string> {
+        let battleResponse = new Array<string>();
         let calculateAttack = attacker.calculateAttack()
         let life = defenser.getLife() - calculateAttack;
         if (life <= 0) {
@@ -97,14 +95,13 @@ export class CharacterService implements OnApplicationBootstrap {
         if (defenser.getDead()) {
             battleResponse.push(`${attacker.getName()} venceu a batalha! ${attacker.getName()} ainda tem ${attacker.getLife()} pontos de vida restantes!`)
         };
-        return;
+        return battleResponse;
     }
 
-    firstCharacterToAttack(
+    compareCharacterVelocity(
         firstCharacter: Character,
-        secondCharacter: Character,
-        battleResponse: Array<string>
-    ): Character {
+        secondCharacter: Character
+    ): iResponseFirstAttacker {
         var firstCharacterVelocity: number;
         var secondCharacterVelocity: number;
         while (firstCharacterVelocity == secondCharacterVelocity) {
@@ -114,13 +111,19 @@ export class CharacterService implements OnApplicationBootstrap {
         if (
             firstCharacterVelocity > secondCharacterVelocity
         ) {
-            battleResponse.push(`${firstCharacter.getName()} (${firstCharacterVelocity}) foi mais veloz que ${secondCharacter.getName()} (${secondCharacterVelocity}) e irá começar!`);
-            return firstCharacter;
+            return {
+                firstAttacker: firstCharacter,
+                firstDefenser: secondCharacter,
+                response: `${firstCharacter.getName()} (${firstCharacterVelocity}) foi mais veloz que ${secondCharacter.getName()} (${secondCharacterVelocity}) e irá começar!`
+            };
         } else if (
             firstCharacterVelocity < secondCharacterVelocity
         ) {
-            battleResponse.push(`${secondCharacter.getName()} (${secondCharacterVelocity}) foi mais veloz que ${firstCharacter.getName()} (${firstCharacterVelocity}) e irá começar!`);
-            return secondCharacter;
+            return {
+                firstAttacker: secondCharacter,
+                firstDefenser: firstCharacter,
+                response: `${secondCharacter.getName()} (${secondCharacterVelocity}) foi mais veloz que ${firstCharacter.getName()} (${firstCharacterVelocity}) e irá começar!`
+            };
         }
     }
 }

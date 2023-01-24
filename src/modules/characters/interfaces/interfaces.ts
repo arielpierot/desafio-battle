@@ -1,9 +1,4 @@
-export interface iProfession {
-  status: iStatus;
-  battleModifiers: iBattleModifiers;
-  calculateAttack(): void;
-  calculateVelocity(): void;
-}
+import { Character } from "../entities/character.entity";
 
 export interface iBattleModifiers {
   attack: iStatus;
@@ -16,3 +11,11 @@ export interface iStatus {
   dexterity?: number;
   intelligence?: number;
 }
+
+
+export interface iResponseFirstAttacker {
+  firstAttacker: Character;
+  firstDefenser: Character;
+  response: string;
+}
+

@@ -21,6 +21,7 @@ export class Thief extends Character {
 
   constructor(name: string) {
     super(name);
-    super.type = Thief.name;
+    this.setLife(this.status.life);
+    this.setType(Thief.name);
   }
 }
