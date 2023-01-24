@@ -1,4 +1,4 @@
-import { Character } from "../entities/character.entity";
+import { Character } from '../entities/character.entity';
 
 export interface iBattleModifiers {
   attack: iStatus;
@@ -12,10 +12,8 @@ export interface iStatus {
   intelligence?: number;
 }
 
-
 export interface iResponseFirstAttacker {
   firstAttacker: Character;
   firstDefenser: Character;
   response: string;
 }
-
