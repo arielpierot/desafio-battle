@@ -79,17 +79,13 @@ export class CharacterService implements OnApplicationBootstrap {
 
     challenge(firstCharacter: Character, secondCharacter: Character, battleResponse: Array<string>) {
         if (firstCharacter.getDead() || secondCharacter.getDead()) {
-            return battleResponse;
+            return;
         }
-        let attackLogs = this.attack(firstCharacter, secondCharacter);
-        attackLogs.forEach((logValue) => {
-            battleResponse.push(logValue);
-        });
+        this.attack(firstCharacter, secondCharacter, battleResponse);
         this.challenge(secondCharacter, firstCharacter, battleResponse)
     }
 
-    attack(attacker: Character, defenser: Character): Array<string> {
-        let attackResponse = new Array<string>();
+    attack(attacker: Character, defenser: Character, battleResponse: Array<string>) {
         let calculateAttack = attacker.calculateAttack()
         let life = defenser.getLife() - calculateAttack;
         if (life <= 0) {
@@ -97,11 +93,11 @@ export class CharacterService implements OnApplicationBootstrap {
             defenser.setDead(true);
         }
         defenser.setLife(life);
-        attackResponse.push(`${attacker.getName()} atacou ${defenser.getName()} com ${calculateAttack} de dano, ${defenser.getName()} com ${life} pontos de vida restantes;`)
+        battleResponse.push(`${attacker.getName()} atacou ${defenser.getName()} com ${calculateAttack} de dano, ${defenser.getName()} com ${life} pontos de vida restantes;`)
         if (defenser.getDead()) {
-            attackResponse.push(`${attacker.getName()} venceu a batalha! ${attacker.getName()} ainda tem ${attacker.getLife()} pontos de vida restantes!`)
+            battleResponse.push(`${attacker.getName()} venceu a batalha! ${attacker.getName()} ainda tem ${attacker.getLife()} pontos de vida restantes!`)
         };
-        return attackResponse;
+        return;
     }
 
     firstCharacterToAttack(
