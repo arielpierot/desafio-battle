@@ -1,33 +1,26 @@
-import { iBattleModifiers, iStatus, iProfession } from "../interfaces/interfaces";
-import { Character } from "./character.entity";
+import { iBattleModifiers, iStatus } from '../interfaces/interfaces';
+import { Character } from './character.entity';
 
 export class Warrior extends Character {
-    status: iStatus = {
-        life: 20,
-        power: 10,
-        dexterity: 5,
-        intelligence: 5,
-    }
-    battle_modifiers: iBattleModifiers = {
-        attack: {
-            power: 80,
-            dexterity: 20,
-        }, velocity: {
-            dexterity: 60,
-            intelligence: 20,
-        }
-    };
+  status: iStatus = {
+    life: 20,
+    power: 10,
+    dexterity: 5,
+    intelligence: 5,
+  };
+  battleModifiers: iBattleModifiers = {
+    attack: {
+      power: 0.8,
+      dexterity: 0.2,
+    },
+    velocity: {
+      dexterity: 0.6,
+      intelligence: 0.2,
+    },
+  };
 
-    constructor(name: string) {
-        super(name);
-        super.type = Warrior.name
-    }
-
-    public calculateAttack(): number {
-        return 10
-    }
-
-    public calculateVelocity(): number {
-        return 10
-    }
+  constructor(name: string) {
+    super(name);
+    super.type = Warrior.name;
+  }
 }

@@ -5,25 +5,25 @@ import { Character } from './entities/character.entity';
 
 @Controller('characters')
 export class CharacterController {
-    constructor(private readonly characterService: CharacterService) { }
+  constructor(private readonly characterService: CharacterService) {}
 
-    @Get()
-    list(): any {
-        return this.characterService.list();
-    }
+  @Get()
+  list(): any {
+    return this.characterService.list();
+  }
 
-    @Get(':name')
-    fetch(@Param('name') name: string): Character {
-        return this.characterService.fetch(name);
-    }
+  @Get(':name')
+  fetch(@Param('name') name: string): Character {
+    return this.characterService.fetch(name);
+  }
 
-    @Post()
-    create(@Body() createCharacterDto: CreateCharacterDto): any {
-        return this.characterService.create(createCharacterDto);
-    }
+  @Post()
+  create(@Body() createCharacterDto: CreateCharacterDto): any {
+    return this.characterService.create(createCharacterDto);
+  }
 
-    @Put()
-    battle(@Body() battleCharactersDto: BattleCharactersDto): any {
-        return 'battle started'
-    }
+  @Put()
+  battle(@Body() battleCharactersDto: BattleCharactersDto): any {
+    return this.characterService.battle(battleCharactersDto);
+  }
 }

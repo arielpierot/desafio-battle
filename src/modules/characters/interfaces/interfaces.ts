@@ -1,18 +1,18 @@
 export interface iProfession {
-    status: iStatus
-    battle_modifiers: iBattleModifiers
-    calculateAttack(): number;
-    calculateVelocity(): number;
+  status: iStatus;
+  battleModifiers: iBattleModifiers;
+  calculateAttack(): void;
+  calculateVelocity(): void;
 }
 
 export interface iBattleModifiers {
-    attack: iStatus;
-    velocity: iStatus;
+  attack: iStatus;
+  velocity: iStatus;
 }
 
 export interface iStatus {
-    life?: number;
-    power?: number;
-    dexterity?: number;
-    intelligence?: number;
+  life?: number;
+  power?: number;
+  dexterity?: number;
+  intelligence?: number;
 }

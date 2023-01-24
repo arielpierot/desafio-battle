@@ -1,17 +1,50 @@
-import { iBattleModifiers, iProfession, iStatus } from "../interfaces/interfaces";
-import { Mage } from "./mage.entity";
-import { Thief } from "./thief.entity";
-import { Warrior } from "./warrior.entity";
+import {
+    iBattleModifiers,
+    iProfession,
+    iStatus,
+} from '../interfaces/interfaces';
 
-export abstract class Character implements iProfession {
+export class Character implements iProfession {
     private name: string;
     private dead: boolean;
     type: string;
     status: iStatus;
-    battle_modifiers: iBattleModifiers;
+    battleModifiers: iBattleModifiers;
 
-    abstract calculateAttack(): number;
-    abstract calculateVelocity(): number;
+    constructor(name: string) {
+        this.name = name;
+        this.dead = false;
+    }
+
+    calculateAttack(): number {
+        let attack = 0;
+        if (this.battleModifiers.attack.power)
+            attack = attack + this.battleModifiers.attack.power * this.status.power;
+        if (this.battleModifiers.attack.dexterity)
+            attack =
+                attack + this.battleModifiers.attack.dexterity * this.status.dexterity;
+        if (this.battleModifiers.attack.intelligence)
+            attack =
+                attack +
+                this.battleModifiers.attack.intelligence * this.status.intelligence;
+        return Math.floor(Math.random() * attack);
+    }
+
+    calculateVelocity(): number {
+        let velocity = 0;
+        if (this.battleModifiers.velocity.power)
+            velocity =
+                velocity + this.battleModifiers.velocity.power * this.status.power;
+        if (this.battleModifiers.velocity.dexterity)
+            velocity =
+                velocity +
+                this.battleModifiers.velocity.dexterity * this.status.dexterity;
+        if (this.battleModifiers.velocity.intelligence)
+            velocity =
+                velocity +
+                this.battleModifiers.velocity.intelligence * this.status.intelligence;
+        return Math.floor(Math.random() * velocity);
+    }
 
     public getName() {
         return this.name;
@@ -25,8 +58,11 @@ export abstract class Character implements iProfession {
         this.dead = dead;
     }
 
-    constructor(name: string) {
-        this.name = name;
-        this.dead = false;
+    public getLife(): number {
+        return this.status.life;
+    }
+
+    public setLife(life: number) {
+        this.status.life = life;
     }
 }

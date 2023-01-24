@@ -1,42 +1,27 @@
-import { iBattleModifiers, iStatus } from "../interfaces/interfaces";
-import { Character } from "./character.entity";
+import { iBattleModifiers, iStatus } from '../interfaces/interfaces';
+import { Character } from './character.entity';
 
 export class Mage extends Character {
-    readonly status: iStatus = {
-        life: 12,
-        power: 5,
-        dexterity: 6,
-        intelligence: 10,
-    }
-    readonly battle_modifiers: iBattleModifiers = {
-        attack: {
-            power: 20,
-            dexterity: 50,
-            intelligence: 150,
-        }, velocity: {
-            power: 20,
-            dexterity: 50,
-        }
-    };
+  status: iStatus = {
+    life: 12,
+    power: 5,
+    dexterity: 6,
+    intelligence: 10,
+  };
+  battleModifiers: iBattleModifiers = {
+    attack: {
+      power: 0.2,
+      dexterity: 0.5,
+      intelligence: 1.5,
+    },
+    velocity: {
+      power: 0.2,
+      dexterity: 0.5,
+    },
+  };
 
-    constructor(name: string) {
-        super(name);
-        super.type = Mage.name
-    }
-
-    public calculateAttack(): number {
-        return 10
-    }
-
-    public calculateVelocity(): number {
-        return 10
-    }
-
-    public getLife(): number {
-        return this.status.life;
-    }
-
-    public setLife(life: number) {
-        this.status.life = life;
-    }
+  constructor(name: string) {
+    super(name);
+    super.type = Mage.name;
+  }
 }
