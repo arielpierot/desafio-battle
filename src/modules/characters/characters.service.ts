@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { BattleCharactersDto, CreateCharacterDto } from './dto/dto';
 import { Character } from './entities/character.entity';
 import { Mage } from './entities/mage.entity';
@@ -8,7 +8,15 @@ import { Warrior } from './entities/warrior.entity';
 const characters = new Map<string, Character>();
 
 @Injectable()
-export class CharacterService {
+export class CharacterService implements OnApplicationBootstrap {
+
+    onApplicationBootstrap() {
+        let characterFirst = new Mage('Ariel');
+        characters.set(characterFirst.getName(), characterFirst);
+        let characterSecond = new Warrior('Ariel2');
+        characters.set(characterSecond.getName(), characterSecond);
+    }
+
     list(): Character[] {
         return Array.from(characters.values());
     }
@@ -41,60 +49,65 @@ export class CharacterService {
             }
         }
         if (character) {
-            characters.set(characterName, character);
+            characters.set(character.getName(), character);
         }
         return character;
     }
 
-    battle(battleCharactersDto: BattleCharactersDto): Character {
+    battle(battleCharactersDto: BattleCharactersDto): Array<string> {
         let firstCharacter = characters.get(
             battleCharactersDto.character_name_first,
         );
         let secondCharacter = characters.get(
             battleCharactersDto.character_name_second,
         );
-        let champion: Character;
+        let battleResponse = new Array<string>();
 
         let firstAttacker = this.firstCharacterToAttack(
             firstCharacter,
             secondCharacter,
+            battleResponse,
         );
 
         if (firstAttacker.getName() == firstCharacter.getName()) {
-            champion = this.challenge(firstCharacter, secondCharacter);
+            this.challenge(firstCharacter, secondCharacter, battleResponse)
+            return battleResponse;
         }
-        champion = this.challenge(secondCharacter, firstCharacter);
-        console.log("%s venceu.", champion.getName())
-        return champion;
+        this.challenge(secondCharacter, firstCharacter, battleResponse)
+        return battleResponse;
     }
 
-    challenge(firstCharacter: Character, secondCharacter: Character): Character {
-        if (!firstCharacter.getDead() && !secondCharacter.getDead()) {
-            secondCharacter = this.attack(firstCharacter, secondCharacter)
-            this.challenge(secondCharacter, firstCharacter)
+    challenge(firstCharacter: Character, secondCharacter: Character, battleResponse: Array<string>) {
+        if (firstCharacter.getDead() || secondCharacter.getDead()) {
+            return battleResponse;
         }
-        if (firstCharacter.getDead()) {
-            return secondCharacter
-        }
-        return firstCharacter;
+        let attackLogs = this.attack(firstCharacter, secondCharacter);
+        attackLogs.forEach((logValue) => {
+            battleResponse.push(logValue);
+        });
+        this.challenge(secondCharacter, firstCharacter, battleResponse)
     }
 
-    attack(attacker: Character, defenser: Character): Character {
+    attack(attacker: Character, defenser: Character): Array<string> {
+        let attackResponse = new Array<string>();
         let calculateAttack = attacker.calculateAttack()
         let life = defenser.getLife() - calculateAttack;
-        console.log("%s atacou o %s em %d - sobrou apenas %d de vida", attacker.getName(), defenser.getName(), calculateAttack, life)
         if (life <= 0) {
-            defenser.setDead(true);
-            console.log("%s morreu.", defenser.getName())
             life = 0
+            defenser.setDead(true);
         }
         defenser.setLife(life);
-        return defenser;
+        attackResponse.push(`${attacker.getName()} atacou ${defenser.getName()} com ${calculateAttack} de dano, ${defenser.getName()} com ${life} pontos de vida restantes;`)
+        if (defenser.getDead()) {
+            attackResponse.push(`${attacker.getName()} venceu a batalha! ${attacker.getName()} ainda tem ${attacker.getLife()} pontos de vida restantes!`)
+        };
+        return attackResponse;
     }
 
     firstCharacterToAttack(
         firstCharacter: Character,
         secondCharacter: Character,
+        battleResponse: Array<string>
     ): Character {
         var firstCharacterVelocity: number;
         var secondCharacterVelocity: number;
@@ -105,10 +118,12 @@ export class CharacterService {
         if (
             firstCharacterVelocity > secondCharacterVelocity
         ) {
+            battleResponse.push(`${firstCharacter.getName()} (${firstCharacterVelocity}) foi mais veloz que ${secondCharacter.getName()} (${secondCharacterVelocity}) e irá começar!`);
             return firstCharacter;
         } else if (
             firstCharacterVelocity < secondCharacterVelocity
         ) {
+            battleResponse.push(`${secondCharacter.getName()} (${secondCharacterVelocity}) foi mais veloz que ${firstCharacter.getName()} (${firstCharacterVelocity}) e irá começar!`);
             return secondCharacter;
         }
     }

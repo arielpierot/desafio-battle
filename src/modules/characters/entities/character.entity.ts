@@ -4,7 +4,7 @@ import {
     iStatus,
 } from '../interfaces/interfaces';
 
-export class Character implements iProfession {
+export abstract class Character implements iProfession {
     private name: string;
     private dead: boolean;
     type: string;
