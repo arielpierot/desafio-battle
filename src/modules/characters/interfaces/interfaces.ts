@@ -14,6 +14,8 @@ export interface iStatus {
 
 export interface iResponseFirstAttacker {
   firstAttacker: Character;
+  firstAttackerVelocity: number;
   firstDefenser: Character;
+  firstDefenserVelocity: number;
   response: string;
 }

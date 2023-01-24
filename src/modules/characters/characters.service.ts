@@ -10,7 +10,7 @@ import { Thief } from './entities/thief.entity';
 import { Warrior } from './entities/warrior.entity';
 import { iResponseFirstAttacker } from './interfaces/interfaces';
 
-const characters = new Map<string, Character>();
+let characters = new Map<string, Character>();
 
 @Injectable()
 export class CharacterService implements OnApplicationBootstrap {
@@ -29,7 +29,7 @@ export class CharacterService implements OnApplicationBootstrap {
     return characters.get(name);
   }
 
-  create(createCharacterDto: CreateCharacterDto): Character | string {
+  create(createCharacterDto: CreateCharacterDto): Character {
     let character: Character;
     const characterName = createCharacterDto.name;
     if (characters.get(characterName)) {
@@ -127,15 +127,22 @@ export class CharacterService implements OnApplicationBootstrap {
     if (firstCharacterVelocity > secondCharacterVelocity) {
       return {
         firstAttacker: firstCharacter,
+        firstAttackerVelocity: firstCharacterVelocity,
         firstDefenser: secondCharacter,
+        firstDefenserVelocity: secondCharacterVelocity,
         response: `${firstCharacter.getName()} (${firstCharacterVelocity}) foi mais veloz que ${secondCharacter.getName()} (${secondCharacterVelocity}) e irá começar!`,
       };
-    } else if (firstCharacterVelocity < secondCharacterVelocity) {
-      return {
-        firstAttacker: secondCharacter,
-        firstDefenser: firstCharacter,
-        response: `${secondCharacter.getName()} (${secondCharacterVelocity}) foi mais veloz que ${firstCharacter.getName()} (${firstCharacterVelocity}) e irá começar!`,
-      };
     }
+    return {
+      firstAttacker: secondCharacter,
+      firstAttackerVelocity: secondCharacterVelocity,
+      firstDefenser: firstCharacter,
+      firstDefenserVelocity: firstCharacterVelocity,
+      response: `${secondCharacter.getName()} (${secondCharacterVelocity}) foi mais veloz que ${firstCharacter.getName()} (${firstCharacterVelocity}) e irá começar!`,
+    };
+  }
+
+  clearCharacters() {
+    characters = new Map<string, Character>();
   }
 }
