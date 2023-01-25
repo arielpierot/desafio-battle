@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CharacterModule } from './modules/characters/characters.module';
+import { BattlesModule } from './modules/battles/battles.module';
+import { CharactersModule } from './modules/characters/characters.module';
 
 @Module({
-  imports: [CharacterModule],
+  imports: [CharactersModule, BattlesModule],
   controllers: [],
   providers: [],
 })

@@ -73,3 +73,4 @@ Decisões tomadas
 - Optei por criar um método para zerar a variável que guarda os personagens no serviço e que é utilizada a cada teste do serviço.
 - Optei por criar um campo booleano para representar se o personagem está morto ou não por entender que não existe outro tipo de variável que o melhor represente.
 - No método que verifica o personagem com maior velocidade calculada, preferi retornar a velocidade calculada de ambos para validar no teste que a função está correta.
+- Decidi criar um novo recurso POST (/battles) em outro controller/service pensando que em algum momento seria necessário listar as batalhas que aconteceram. E também para respeitar o REST.

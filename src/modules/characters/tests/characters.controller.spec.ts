@@ -1,27 +1,24 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CharacterController } from '../characters.controller';
-import { CharacterService } from '../characters.service';
+import { CharactersController } from '../characters.controller';
+import { CharactersService } from '../characters.service';
 import { Mage } from '../entities/mage.entity';
 import { Thief } from '../entities/thief.entity';
 import { Warrior } from '../entities/warrior.entity';
-import {
-  battleCharactersDto,
-  createCharacterDto,
-} from './__mocks__/characters.mock';
+import { createCharacterDto } from './__mocks__/characters.mock';
 
-describe('CharacterService', () => {
-  let controller: CharacterController;
-  let service: CharacterService;
+describe('CharactersService', () => {
+  let controller: CharactersController;
+  let service: CharactersService;
   let app: INestApplication;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [CharacterController],
-      providers: [CharacterService],
+      controllers: [CharactersController],
+      providers: [CharactersService],
     }).compile();
-    controller = module.get<CharacterController>(CharacterController);
-    service = module.get<CharacterService>(CharacterService);
+    controller = module.get<CharactersController>(CharactersController);
+    service = module.get<CharactersService>(CharactersService);
     app = module.createNestApplication();
     await app.init();
   });
@@ -69,15 +66,5 @@ describe('CharacterService', () => {
     expect(response).toHaveLength(1);
     expect(response[0]).toBeInstanceOf(Thief);
     expect(listMock).toBeCalledTimes(1);
-  });
-
-  it('success on battle between characters', () => {
-    const battleMock = jest
-      .spyOn(service, 'battle')
-      .mockImplementation(() => []);
-
-    controller.battle(battleCharactersDto);
-    expect(battleMock).toBeCalledWith(battleCharactersDto);
-    expect(battleMock).toBeCalledTimes(1);
   });
 });

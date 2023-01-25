@@ -1,4 +1,4 @@
-import { iBattleModifiers, iStatus } from '../interfaces/interfaces';
+import { iBattleModifiers, iStatus } from '../interfaces/characters.interfaces';
 
 export abstract class Character {
   private name: string;

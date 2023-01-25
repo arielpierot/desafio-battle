@@ -1,4 +1,4 @@
-import { iBattleModifiers, iStatus } from '../interfaces/interfaces';
+import { iBattleModifiers, iStatus } from '../interfaces/characters.interfaces';
 import { Character } from './character.entity';
 
 export class Warrior extends Character {

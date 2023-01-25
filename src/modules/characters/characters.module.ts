@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CharacterController } from './characters.controller';
-import { CharacterService } from './characters.service';
+import { CharactersController } from './characters.controller';
+import { CharactersService } from './characters.service';
 
 @Module({
   imports: [],
-  controllers: [CharacterController],
-  providers: [CharacterService],
+  controllers: [CharactersController],
+  providers: [CharactersService],
 })
-export class CharacterModule {}
+export class CharactersModule {}
