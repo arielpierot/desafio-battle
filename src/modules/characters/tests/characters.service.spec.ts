@@ -3,6 +3,8 @@ import { CharacterService } from '../characters.service';
 import { Mage } from '../entities/mage.entity';
 import { Thief } from '../entities/thief.entity';
 import {
+  battleCharactersDto,
+  battleCharactersDtoMocked,
   characterDtoMageMocked,
   characterDtoThiefMocked,
   characterDtoThiefWrongMocked,
@@ -83,10 +85,8 @@ describe('CharacterService', () => {
       result.firstDefenserVelocity,
     );
     expect(result.response).toContain(
-      `${result.firstAttacker.getName()} (${
-        result.firstAttackerVelocity
-      }) foi mais veloz que ${result.firstDefenser.getName()} (${
-        result.firstDefenserVelocity
+      `${result.firstAttacker.getName()} (${result.firstAttackerVelocity
+      }) foi mais veloz que ${result.firstDefenser.getName()} (${result.firstDefenserVelocity
       }) e irá começar!`,
     );
   });
@@ -122,5 +122,32 @@ describe('CharacterService', () => {
     expect(attackMock).toBeCalledWith(mageCreated, thiefCreated);
     expect(attackMock).toBeCalledTimes(1);
     expect(thiefCreated.getDead()).toEqual(true);
+  });
+
+  it('success on battle between characters', () => {
+
+    const mageCreated = service.create(characterDtoMageMocked);
+    const thiefCreated = service.create(characterDtoThiefMocked);
+
+    const compareCharacterVelocityMock = jest
+      .spyOn(service, 'compareCharacterVelocity')
+      .mockImplementation((characterFirst, characterSecond) => {
+        return {
+          firstAttacker: characterFirst,
+          firstAttackerVelocity: 10,
+          firstDefenser: characterSecond,
+          firstDefenserVelocity: 0,
+          response: '',
+        }
+      });
+
+    const challengeMock = jest
+      .spyOn(service, 'challenge')
+      .mockImplementation(() => []);
+
+    service.battle(battleCharactersDtoMocked);
+    expect(compareCharacterVelocityMock).toBeCalledWith(mageCreated, thiefCreated);
+    expect(compareCharacterVelocityMock).toBeCalledTimes(1);
+    expect(challengeMock).toBeCalledTimes(1);
   });
 });

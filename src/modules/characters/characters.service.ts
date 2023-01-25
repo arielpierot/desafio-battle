@@ -15,9 +15,9 @@ let characters = new Map<string, Character>();
 @Injectable()
 export class CharacterService implements OnApplicationBootstrap {
   onApplicationBootstrap() {
-    const characterFirst = new Mage('Ariel');
+    const characterFirst = new Mage('Mage');
     characters.set(characterFirst.getName(), characterFirst);
-    const characterSecond = new Warrior('Ariel2');
+    const characterSecond = new Warrior('Warrior');
     characters.set(characterSecond.getName(), characterSecond);
   }
 
@@ -66,6 +66,10 @@ export class CharacterService implements OnApplicationBootstrap {
     const secondCharacter = characters.get(
       battleCharactersDto.character_name_second,
     );
+
+    if (firstCharacter.getDead() || secondCharacter.getDead()) {
+      throw new BadRequestException('character dead');
+    }
     const responseCompareVelocity = this.compareCharacterVelocity(
       firstCharacter,
       secondCharacter,

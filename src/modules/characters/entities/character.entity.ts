@@ -68,6 +68,6 @@ export abstract class Character {
   }
 
   public setType(type: string) {
-    this.type = type;
+    this.type = type.toLocaleLowerCase();
   }
 }
