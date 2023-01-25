@@ -1,73 +1,75 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Descrição
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Para resolver esse desafio foi desenvolvido uma API Rest para o jogo de batalhas. Esse projeto foi criado com o [Nest framework](https://github.com/nestjs/nest) com Typescript. 
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Pré-requisitos
 
-## Description
+Esse projeto necessita de [Node.JS](https://nodejs.org/en/download/) (versão >= 12, exceto para v13) e [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/) instalados em sua máquina.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
-
+## Instalando
+É necessário utilizar esse comando para instalar o projeto:
 ```bash
 $ yarn install
 ```
 
-## Running the app
-
+## Rodando o projeto
+A aplicação está rodando na porta 3000 por padrão. Para iniciar a aplicação localmente, você pode usar o comando:
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+$ yarn start
 ```
 
-## Test
-
+## Rodando os testes
+Você pode rodar os testes com o comando:
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+$ yarn test
 ```
 
-## Support
+## Resources
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Criar um personagem
+- **POST** /characters
+```bash
+curl --location --request POST 'http://localhost:3000/characters' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name":"Ariel",
+    "profession":"thief"
+}'
+```
 
-## Stay in touch
+### Buscar um personagem pelo nome
+- **GET** /characters/<***name***>
+```bash
+curl --location --request GET 'http://localhost:3000/characters/Ariel'
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Listar personagens
+- **GET** /characters
+```bash
+curl --location --request GET 'http://localhost:3000/characters'
+```
 
-## License
+### Iniciar uma batalha entre personagens
+- **POST** /battles
+```bash
+curl --location --request POST 'http://localhost:3000/battles' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "character_name_first": "CharacterOne",
+    "character_name_second": "CharacterTwo"
+}'
+```
 
-Nest is [MIT licensed](LICENSE).
+Decisões tomadas
+================
+
+- Foi necessário a utilização de orientação a objetos para reaproveitar métodos utilizados nas classes dos personagens como os métodos que calculam a velocidade calculada e ataque calculado, pois estas podem reaproveitar os atributos das classes. E também atributos compartilhados entre as classes que são privados (ex: life, name, type, dead)
+- Foi utilizado o factory method para criar a classe da profissão baseada em uma classe abstrata de personagem que é extendida por essas que contém seus respectivos atributos.
+- No método de challenge usei recursão e passei por referência o array de string com o response esperado ao fim da batalha.
+- Criei uma variável dentro do arquivo de serviço de personagens para utilizar a memória da aplicação.
+- Optei pelo uso de uma variável map<string, character> no serviço pela perfomance nas consultas do personagem.
+- Optei por criar alguns personagens já no momento da iniciação da aplicação, para poder testar a funcionalidade de lista sem precisar criar novos personagens.
+- Optei por criar um método para zerar a variável que guarda os personagens no serviço e que é utilizada a cada teste do serviço.
+- Optei por criar um campo booleano para representar se o personagem está morto ou não por entender que não existe outro tipo de variável que o melhor represente.
+- No método que verifica o personagem com maior velocidade calculada, preferi retornar a velocidade calculada de ambos para validar no teste que a função está correta.
