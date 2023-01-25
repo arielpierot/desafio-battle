@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   OnApplicationBootstrap,
 } from '@nestjs/common';
 import { CreateCharacterDto } from './dto/characters.dto';
@@ -25,6 +26,10 @@ export class CharactersService implements OnApplicationBootstrap {
   }
 
   fetch(name: string): Character {
+    const character = characters.get(name);
+    if (!character) {
+      throw new NotFoundException();
+    }
     return characters.get(name);
   }
 

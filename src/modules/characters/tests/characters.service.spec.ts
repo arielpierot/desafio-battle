@@ -55,9 +55,11 @@ describe('CharactersService', () => {
   });
 
   it('failed on find a character', () => {
-    const characterName = 'Mage Two';
-    const result = service.fetch(characterName);
-    expect(result).toBeUndefined();
+    try {
+      service.fetch('test');
+    } catch (e) {
+      expect(e.message).toBe('Not Found');
+    }
   });
 
   it('success on list', () => {

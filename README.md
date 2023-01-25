@@ -41,7 +41,7 @@ curl --location --request POST 'http://localhost:3000/characters' \
 ### Buscar um personagem pelo nome
 - **GET** /characters/<***name***>
 ```bash
-curl --location --request GET 'http://localhost:3000/characters/Ariel'
+curl --location --request GET 'http://localhost:3000/characters/Mage'
 ```
 
 ### Listar personagens
@@ -56,8 +56,8 @@ curl --location --request GET 'http://localhost:3000/characters'
 curl --location --request POST 'http://localhost:3000/battles' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "character_name_first": "CharacterOne",
-    "character_name_second": "CharacterTwo"
+    "character_name_first": "Mage",
+    "character_name_second": "Warrior"
 }'
 ```
 
